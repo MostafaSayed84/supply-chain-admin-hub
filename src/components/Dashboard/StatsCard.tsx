@@ -33,7 +33,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-2xl font-bold">{value}</p>
+            <p className="text-2xl font-bold">{typeof value === 'number' && title.toLowerCase().includes('revenue') ? `${value.toLocaleString('ar-SA')} ر.س` : value}</p>
             {change && (
               <p className={`text-xs ${getChangeColor()} mt-1`}>
                 {change}

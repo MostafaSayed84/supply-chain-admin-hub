@@ -13,6 +13,12 @@ import { ProductList } from "./pages/admin/ProductList";
 import { PurchaseOrders } from "./pages/admin/PurchaseOrders";
 import { VendorDashboard } from "./pages/vendor/VendorDashboard";
 import { VendorOrders } from "./pages/vendor/VendorOrders";
+import { OrderDetails } from "./pages/vendor/OrderDetails";
+import { AddVendor } from "./pages/admin/AddVendor";
+import { AddProduct } from "./pages/admin/AddProduct";
+import { VendorProducts } from "./pages/admin/VendorProducts";
+import { CreatePurchaseOrder } from "./pages/admin/CreatePurchaseOrder";
+import { ShippedOrders } from "./pages/admin/ShippedOrders";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +59,36 @@ const App = () => (
             <Route path="/vendor/orders" element={
               <ProtectedRoute allowedRole="vendor">
                 <VendorOrders />
+              </ProtectedRoute>
+            } />
+            <Route path="/vendor/orders/:orderId" element={
+              <ProtectedRoute allowedRole="vendor">
+                <OrderDetails />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/add-vendor" element={
+              <ProtectedRoute allowedRole="admin">
+                <AddVendor />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/add-product" element={
+              <ProtectedRoute allowedRole="admin">
+                <AddProduct />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/vendors/:vendorId/products" element={
+              <ProtectedRoute allowedRole="admin">
+                <VendorProducts />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/create-purchase-order" element={
+              <ProtectedRoute allowedRole="admin">
+                <CreatePurchaseOrder />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/shipped-orders" element={
+              <ProtectedRoute allowedRole="admin">
+                <ShippedOrders />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
