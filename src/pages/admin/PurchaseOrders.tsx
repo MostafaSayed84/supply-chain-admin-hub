@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { mockPurchaseOrders } from '@/data/mockData';
 import { Search, Plus, FileText, Calendar, DollarSign, Building2, Eye } from 'lucide-react';
 
 export const PurchaseOrders: React.FC = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   
@@ -38,7 +40,10 @@ export const PurchaseOrders: React.FC = () => {
           <h1 className="text-3xl font-bold">Purchase Orders</h1>
           <p className="text-muted-foreground">Manage and track all purchase orders</p>
         </div>
-        <Button className="bg-gradient-primary hover:bg-primary-hover shadow-admin">
+        <Button 
+          className="bg-gradient-primary hover:bg-primary-hover shadow-admin"
+          onClick={() => navigate('/admin/create-purchase-order')}
+        >
           <Plus className="w-4 h-4 mr-2" />
           Create Purchase Order
         </Button>

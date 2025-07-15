@@ -23,11 +23,8 @@ export const Sidebar: React.FC = () => {
   const adminMenuItems = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/admin' },
     { icon: Building2, label: 'Vendors', href: '/admin/vendors' },
-    { icon: Plus, label: 'Add Vendor', href: '/admin/add-vendor' },
     { icon: Package, label: 'Products', href: '/admin/products' },
-    { icon: Plus, label: 'Add Product', href: '/admin/add-product' },
     { icon: ShoppingCart, label: 'Purchase Orders', href: '/admin/purchase-orders' },
-    { icon: Plus, label: 'Create PO', href: '/admin/create-purchase-order' },
     { icon: Truck, label: 'Shipped Orders', href: '/admin/shipped-orders' },
   ];
 

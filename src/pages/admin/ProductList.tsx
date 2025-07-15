@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { mockProducts } from '@/data/mockData';
 import { Search, Plus, Package, DollarSign, BarChart3 } from 'lucide-react';
 
 export const ProductList: React.FC = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedVendor, setSelectedVendor] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -40,7 +42,10 @@ export const ProductList: React.FC = () => {
           <h1 className="text-3xl font-bold">Products</h1>
           <p className="text-muted-foreground">Manage all products across vendors</p>
         </div>
-        <Button className="bg-gradient-primary hover:bg-primary-hover shadow-admin">
+        <Button 
+          className="bg-gradient-primary hover:bg-primary-hover shadow-admin"
+          onClick={() => navigate('/admin/add-product')}
+        >
           <Plus className="w-4 h-4 mr-2" />
           Add Product
         </Button>

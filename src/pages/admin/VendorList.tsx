@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +8,7 @@ import { mockVendors } from '@/data/mockData';
 import { Search, Plus, Building2, Phone, Mail, MapPin } from 'lucide-react';
 
 export const VendorList: React.FC = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   
   const filteredVendors = mockVendors.filter(vendor =>
@@ -31,7 +33,10 @@ export const VendorList: React.FC = () => {
           <h1 className="text-3xl font-bold">Vendors</h1>
           <p className="text-muted-foreground">Manage your vendor relationships and registrations</p>
         </div>
-        <Button className="bg-gradient-primary hover:bg-primary-hover shadow-admin">
+        <Button 
+          className="bg-gradient-primary hover:bg-primary-hover shadow-admin"
+          onClick={() => navigate('/admin/add-vendor')}
+        >
           <Plus className="w-4 h-4 mr-2" />
           Add Vendor
         </Button>
