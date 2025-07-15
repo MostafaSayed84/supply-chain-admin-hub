@@ -43,6 +43,7 @@ export const mockProducts: Product[] = [
     vendorName: 'TechCorp Suppliers',
     price: 89.99,
     stock: 150,
+    unit: 'pcs',
     status: 'active'
   },
   {
@@ -54,6 +55,7 @@ export const mockProducts: Product[] = [
     vendorName: 'TechCorp Suppliers',
     price: 24.99,
     stock: 300,
+    unit: 'pcs',
     status: 'active'
   },
   {
@@ -65,6 +67,7 @@ export const mockProducts: Product[] = [
     vendorName: 'Global Electronics',
     price: 45.99,
     stock: 75,
+    unit: 'pcs',
     status: 'active'
   },
   {
@@ -76,6 +79,7 @@ export const mockProducts: Product[] = [
     vendorName: 'Global Electronics',
     price: 32.99,
     stock: 200,
+    unit: 'pcs',
     status: 'active'
   },
   {
@@ -87,6 +91,7 @@ export const mockProducts: Product[] = [
     vendorName: 'Green Solutions',
     price: 19.99,
     stock: 50,
+    unit: 'pcs',
     status: 'active'
   }
 ];
@@ -115,9 +120,11 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
       }
     ],
     status: 'pending',
+    createdAt: '2024-07-12',
     orderDate: '2024-07-12',
     expectedDelivery: '2024-07-20',
     total: 6998.50,
+    totalAmount: 6998.50,
     notes: 'Urgent order for Q3 launch'
   },
   {
@@ -135,9 +142,11 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
       }
     ],
     status: 'shipped',
+    createdAt: '2024-07-08',
     orderDate: '2024-07-08',
     expectedDelivery: '2024-07-15',
-    total: 1149.75
+    total: 1149.75,
+    totalAmount: 1149.75
   },
   {
     id: 'PO-003',
@@ -154,8 +163,10 @@ export const mockPurchaseOrders: PurchaseOrder[] = [
       }
     ],
     status: 'delivered',
+    createdAt: '2024-06-25',
     orderDate: '2024-06-25',
     expectedDelivery: '2024-07-02',
-    total: 4998.00
+    total: 4998.00,
+    totalAmount: 4998.00
   }
 ];

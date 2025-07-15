@@ -12,12 +12,15 @@ export interface Vendor {
 export interface Product {
   id: string;
   name: string;
+  description?: string;
   category: string;
   sku: string;
   vendorId: string;
   vendorName: string;
   price: number;
+  basePrice?: number;
   stock: number;
+  unit: string;
   status: 'active' | 'inactive';
 }
 
@@ -27,9 +30,11 @@ export interface PurchaseOrder {
   vendorName: string;
   items: PurchaseOrderItem[];
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  createdAt: string;
   orderDate: string;
   expectedDelivery?: string;
   total: number;
+  totalAmount: number;
   notes?: string;
 }
 
