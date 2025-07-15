@@ -1,204 +1,237 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { AppLayout } from "@/components/Layout/AppLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Package, Calendar, User } from "lucide-react";
-import { mockPurchaseOrders } from "@/data/mockData";
-import { formatCurrency } from "@/lib/currency";
-import { StatusBadge } from "@/components/ui/status-badge";
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { AppLayout } from '@/components/Layout/AppLayout';
+import { ArrowLeft, Package, Calendar, DollarSign, Truck, CheckCircle } from 'lucide-react';
+import { mockPurchaseOrders, mockProducts } from '@/data/mockData';
+import { formatCurrency } from '@/lib/currency';
+import { useToast } from '@/hooks/use-toast';
 
-export const OrderDetails = () => {
+export const OrderDetails: React.FC = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [newStatus, setNewStatus] = useState("");
+  const [status, setStatus] = useState('');
 
   const order = mockPurchaseOrders.find(o => o.id === orderId);
 
   if (!order) {
     return (
       <AppLayout>
-        <div className="text-center py-8">
-          <h1 className="text-2xl font-bold">Order not found</h1>
-          <Button onClick={() => navigate("/vendor/orders")} className="mt-4">
-            Back to Orders
-          </Button>
+        <div className="p-6">
+          <Card className="shadow-card">
+            <CardContent className="p-12 text-center">
+              <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium mb-2">Order not found</h3>
+              <p className="text-muted-foreground">The requested order could not be found.</p>
+              <Button onClick={() => navigate('/vendor/orders')} className="mt-4" variant="outline">
+                Back to Orders
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </AppLayout>
     );
   }
 
   const handleStatusUpdate = () => {
-    if (!newStatus) return;
-    
-    // Simulate API call
-    setTimeout(() => {
+    if (!status) {
       toast({
-        title: "Status Updated",
-        description: `Order ${order.id} status has been updated to ${newStatus}.`,
+        title: "Error",
+        description: "Please select a status.",
+        variant: "destructive",
       });
-      setNewStatus("");
-    }, 1000);
+      return;
+    }
+
+    toast({
+      title: "Status Updated",
+      description: `Order ${order.id} status has been updated to ${status}.`,
+    });
+    
+    navigate('/vendor/orders');
   };
 
-  const availableStatuses = {
-    'pending': ['confirmed', 'cancelled'],
-    'confirmed': ['shipped', 'cancelled'],
-    'shipped': ['delivered'],
-    'delivered': [],
-    'cancelled': []
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'bg-warning/10 text-warning';
+      case 'confirmed': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'shipped': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      case 'delivered': return 'bg-success/10 text-success';
+      case 'cancelled': return 'bg-destructive/10 text-destructive';
+      default: return 'bg-muted/10 text-muted-foreground';
+    }
   };
-
-  const canUpdateStatus = availableStatuses[order.status as keyof typeof availableStatuses].length > 0;
 
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
+        {/* Header */}
         <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate("/vendor/orders")}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
+          <Button variant="outline" size="sm" onClick={() => navigate('/vendor/orders')} className="gap-2">
+            <ArrowLeft className="w-4 h-4" />
             Back to Orders
           </Button>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold">Order Details</h1>
-            <p className="text-muted-foreground">Order ID: {order.id}</p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <Package className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Order {order.id}</h1>
+              <p className="text-muted-foreground">View and manage order details</p>
+            </div>
           </div>
         </div>
 
-        {/* Order Status Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              Order Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Order Date</span>
+        {/* Order Summary */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Card className="shadow-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Order Date</p>
+                  <p className="text-lg font-semibold">{new Date(order.createdAt).toLocaleDateString()}</p>
                 </div>
-                <p className="font-semibold">{order.orderDate}</p>
+                <Calendar className="w-8 h-8 text-primary" />
               </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Current Status</span>
+            </CardContent>
+          </Card>
+          <Card className="shadow-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Total Items</p>
+                  <p className="text-lg font-semibold">{order.items.length}</p>
                 </div>
-                <StatusBadge status={order.status} />
+                <Package className="w-8 h-8 text-primary" />
               </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Expected Delivery</span>
+            </CardContent>
+          </Card>
+          <Card className="shadow-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Total Amount</p>
+                  <p className="text-lg font-semibold text-primary">{formatCurrency(order.totalAmount)}</p>
                 </div>
-                <p className="font-semibold">{order.expectedDelivery || 'Not specified'}</p>
+                <DollarSign className="w-8 h-8 text-primary" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+          <Card className="shadow-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Current Status</p>
+                  <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
+                </div>
+                <Truck className="w-8 h-8 text-primary" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Order Items */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Items</CardTitle>
-          </CardHeader>
+        <Card className="shadow-card">
+          <CardHeader><CardTitle>Order Items</CardTitle></CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>SKU</TableHead>
+                  <TableHead>Product</TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Unit Price</TableHead>
                   <TableHead>Total</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {order.items.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium">{item.productName}</TableCell>
-                    <TableCell>{item.sku}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>{formatCurrency(item.unitPrice)}</TableCell>
-                    <TableCell className="font-semibold">{formatCurrency(item.total)}</TableCell>
-                  </TableRow>
-                ))}
+                {order.items.map((item, index) => {
+                  const product = mockProducts.find(p => p.id === item.productId);
+                  return (
+                    <TableRow key={index}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                            <Package className="w-4 h-4 text-primary-foreground" />
+                          </div>
+                          <div>
+                            <div className="font-medium">{product?.name || 'Unknown Product'}</div>
+                            <div className="text-sm text-muted-foreground">{product?.category}</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{item.quantity} {product?.unit}</TableCell>
+                      <TableCell>{formatCurrency(item.unitPrice)}</TableCell>
+                      <TableCell className="font-medium">{formatCurrency(item.quantity * item.unitPrice)}</TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
-            
-            <div className="mt-6 flex justify-end">
-              <div className="text-right">
-                <p className="text-lg font-semibold">
-                  Total Amount: <span className="text-2xl text-primary">{formatCurrency(order.total)}</span>
-                </p>
+            <div className="mt-6 pt-6 border-t">
+              <div className="flex justify-between items-center text-lg font-semibold">
+                <span>Total Amount:</span>
+                <span className="text-primary">{formatCurrency(order.totalAmount)}</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Notes */}
-        {order.notes && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Order Notes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground bg-muted p-4 rounded">{order.notes}</p>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Status Update */}
-        {canUpdateStatus && (
-          <Card>
+        {order.status === 'pending' || order.status === 'confirmed' ? (
+          <Card className="shadow-card">
             <CardHeader>
-              <CardTitle>Update Order Status</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" />
+                Update Order Status
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex gap-4 items-end max-w-md">
-                <div className="flex-1">
-                  <Select value={newStatus} onValueChange={setNewStatus}>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Change Status To:</label>
+                  <Select value={status} onValueChange={setStatus}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select new status" />
                     </SelectTrigger>
                     <SelectContent>
-                      {availableStatuses[order.status as keyof typeof availableStatuses].map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </SelectItem>
-                      ))}
+                      {order.status === 'pending' && (
+                        <>
+                          <SelectItem value="confirmed">Confirmed</SelectItem>
+                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        </>
+                      )}
+                      {order.status === 'confirmed' && (
+                        <>
+                          <SelectItem value="shipped">Shipped</SelectItem>
+                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        </>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
-                <Button 
-                  onClick={handleStatusUpdate}
-                  disabled={!newStatus}
-                >
-                  Update Status
-                </Button>
-              </div>
-              
-              {order.status === 'confirmed' && (
-                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                  <p className="text-sm text-blue-800 dark:text-blue-200">
-                    💡 Tip: Update status to "Shipped" when you have dispatched the order to the customer.
-                  </p>
+                <div className="flex items-end">
+                  <Button 
+                    onClick={handleStatusUpdate}
+                    className="w-full bg-gradient-primary hover:bg-primary-hover"
+                    disabled={!status}
+                  >
+                    Update Status
+                  </Button>
                 </div>
-              )}
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="shadow-card">
+            <CardContent className="p-6 text-center">
+              <CheckCircle className="w-12 h-12 text-success mx-auto mb-4" />
+              <h3 className="text-lg font-medium mb-2">Order Status: {order.status}</h3>
+              <p className="text-muted-foreground">This order has been {order.status}. No further action is required.</p>
             </CardContent>
           </Card>
         )}

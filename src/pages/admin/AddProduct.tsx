@@ -1,109 +1,134 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AppLayout } from "@/components/Layout/AppLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft } from "lucide-react";
-import { mockVendors } from "@/data/mockData";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { AppLayout } from '@/components/Layout/AppLayout';
+import { ArrowLeft, Package } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-export const AddProduct = () => {
+export const AddProduct: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    sku: "",
-    vendorId: "",
-    price: "",
-    stock: "",
-    status: "active" as const,
-    description: "",
-    specifications: "",
-    warranty: "",
-    brand: ""
+    name: '',
+    description: '',
+    category: '',
+    basePrice: '',
+    unit: '',
+    sku: '',
+    status: 'active' as 'active' | 'inactive',
+    minOrderQuantity: '1'
   });
-
-  const categories = [
-    "Electronics",
-    "Accessories", 
-    "Smart Devices",
-    "Networking",
-    "Energy",
-    "Security",
-    "Industrial",
-    "Software",
-    "Hardware"
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simulate API call
-    setTimeout(() => {
-      toast({
-        title: "Product Added Successfully",
-        description: `${formData.name} has been added to the product catalog.`,
-      });
-      navigate("/admin/products");
-    }, 1000);
+    toast({
+      title: "Product Added",
+      description: `${formData.name} has been added successfully.`,
+    });
+    navigate('/admin/products');
   };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const categories = [
+    'Electronics',
+    'Food & Beverages',
+    'Office Supplies',
+    'Machinery',
+    'Raw Materials',
+    'Textiles',
+    'Chemicals',
+    'Other'
+  ];
+
+  const units = [
+    'pcs',
+    'kg',
+    'liter',
+    'meter',
+    'box',
+    'dozen',
+    'ton',
+    'gallon'
+  ];
+
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <div className="p-6 space-y-6">
+        {/* Header */}
         <div className="flex items-center gap-4">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate("/admin/products")}
-            className="flex items-center gap-2"
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/admin/products')}
+            className="gap-2"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="w-4 h-4" />
             Back to Products
           </Button>
-          <h1 className="text-3xl font-bold">Add New Product</h1>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <Package className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Add New Product</h1>
+              <p className="text-muted-foreground">Create a new product in the catalog</p>
+            </div>
+          </div>
         </div>
 
-        <Card>
+        {/* Form */}
+        <Card className="shadow-card max-w-2xl">
           <CardHeader>
             <CardTitle>Product Information</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Product Name *</Label>
                   <Input
                     id="name"
                     value={formData.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                     placeholder="Enter product name"
                     required
                   />
                 </div>
-
+                
                 <div className="space-y-2">
-                  <Label htmlFor="sku">SKU *</Label>
+                  <Label htmlFor="sku">SKU</Label>
                   <Input
                     id="sku"
                     value={formData.sku}
-                    onChange={(e) => handleInputChange("sku", e.target.value)}
-                    placeholder="Product SKU"
-                    required
+                    onChange={(e) => handleInputChange('sku', e.target.value)}
+                    placeholder="Stock Keeping Unit"
                   />
                 </div>
+              </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Enter product description"
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category *</Label>
-                  <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+                  <Label htmlFor="category">Category</Label>
+                  <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
@@ -116,115 +141,73 @@ export const AddProduct = () => {
                     </SelectContent>
                   </Select>
                 </div>
-
+                
                 <div className="space-y-2">
-                  <Label htmlFor="vendorId">Vendor *</Label>
-                  <Select value={formData.vendorId} onValueChange={(value) => handleInputChange("vendorId", value)}>
+                  <Label htmlFor="unit">Unit</Label>
+                  <Select value={formData.unit} onValueChange={(value) => handleInputChange('unit', value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select vendor" />
+                      <SelectValue placeholder="Select unit" />
                     </SelectTrigger>
                     <SelectContent>
-                      {mockVendors.map((vendor) => (
-                        <SelectItem key={vendor.id} value={vendor.id}>
-                          {vendor.name}
+                      {units.map((unit) => (
+                        <SelectItem key={unit} value={unit}>
+                          {unit}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price (SAR) *</Label>
+                  <Label htmlFor="basePrice">Base Price (SAR)</Label>
                   <Input
-                    id="price"
+                    id="basePrice"
                     type="number"
                     step="0.01"
-                    min="0"
-                    value={formData.price}
-                    onChange={(e) => handleInputChange("price", e.target.value)}
+                    value={formData.basePrice}
+                    onChange={(e) => handleInputChange('basePrice', e.target.value)}
                     placeholder="0.00"
-                    required
                   />
                 </div>
-
+                
                 <div className="space-y-2">
-                  <Label htmlFor="stock">Stock Quantity *</Label>
+                  <Label htmlFor="minOrderQuantity">Minimum Order Quantity</Label>
                   <Input
-                    id="stock"
+                    id="minOrderQuantity"
                     type="number"
-                    min="0"
-                    value={formData.stock}
-                    onChange={(e) => handleInputChange("stock", e.target.value)}
-                    placeholder="0"
-                    required
+                    value={formData.minOrderQuantity}
+                    onChange={(e) => handleInputChange('minOrderQuantity', e.target.value)}
+                    placeholder="1"
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
-                  <Input
-                    id="brand"
-                    value={formData.brand}
-                    onChange={(e) => handleInputChange("brand", e.target.value)}
-                    placeholder="Product brand"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="warranty">Warranty Period</Label>
-                  <Input
-                    id="warranty"
-                    value={formData.warranty}
-                    onChange={(e) => handleInputChange("warranty", e.target.value)}
-                    placeholder="e.g., 1 year"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
-                  <Select value={formData.status} onValueChange={(value) => handleInputChange("status", value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
-                  placeholder="Product description"
-                />
+                <Label htmlFor="status">Status</Label>
+                <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="specifications">Specifications</Label>
-                <Textarea
-                  id="specifications"
-                  value={formData.specifications}
-                  onChange={(e) => handleInputChange("specifications", e.target.value)}
-                  placeholder="Technical specifications"
-                />
-              </div>
-
-              <div className="flex gap-4 pt-4">
-                <Button type="submit" className="flex-1">
-                  Add Product
-                </Button>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => navigate("/admin/products")}
+              <div className="flex gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => navigate('/admin/products')}
                   className="flex-1"
                 >
                   Cancel
+                </Button>
+                <Button type="submit" className="flex-1 bg-gradient-primary hover:bg-primary-hover">
+                  Add Product
                 </Button>
               </div>
             </form>
