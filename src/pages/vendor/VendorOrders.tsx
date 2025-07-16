@@ -121,7 +121,7 @@ export const VendorOrders: React.FC = () => {
                     <Badge className={getStatusColor(order.status)}>
                       {order.status}
                     </Badge>
-                    {order.status === 'pending' && (
+                    {(order.status === 'pending' || order.status === 'confirmed') && (
                       <Button 
                         size="sm" 
                         className="bg-gradient-primary hover:bg-primary-hover"
@@ -138,7 +138,7 @@ export const VendorOrders: React.FC = () => {
                     <DollarSign className="w-4 h-4 text-muted-foreground" />
                     <div>
                       <p className="text-sm text-muted-foreground">Total Amount</p>
-                      <p className="font-bold text-lg">${order.total.toLocaleString()}</p>
+                      <p className="font-bold text-lg">{order.total.toLocaleString()} SAR</p>
                     </div>
                   </div>
                   
@@ -173,10 +173,10 @@ export const VendorOrders: React.FC = () => {
                         </div>
                         <div className="text-center mx-4">
                           <p className="font-medium">Qty: {item.quantity}</p>
-                          <p className="text-sm text-muted-foreground">${item.unitPrice}</p>
+                          <p className="text-sm text-muted-foreground">{item.unitPrice} SAR</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-bold">${item.total.toLocaleString()}</p>
+                          <p className="font-bold">{item.total.toLocaleString()} SAR</p>
                         </div>
                       </div>
                     ))}

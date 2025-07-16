@@ -9,24 +9,24 @@ const mockUsers: (User & { password: string })[] = [
     id: '1',
     email: 'admin@company.com',
     password: 'admin123',
-    name: 'John Admin',
+    name: 'Ahmed Al-Rashid',
     role: 'admin'
   },
   {
     id: '2',
     email: 'vendor1@supplier.com',
     password: 'vendor123',
-    name: 'Jane Vendor',
+    name: 'Fatima Al-Zahra',
     role: 'vendor',
-    companyName: 'TechCorp Suppliers'
+    companyName: 'Al-Riyadh Tech Suppliers'
   },
   {
     id: '3',
     email: 'vendor2@supplier.com',
     password: 'vendor123',
-    name: 'Bob Vendor',
+    name: 'Omar Al-Mansouri',
     role: 'vendor',
-    companyName: 'Global Electronics'
+    companyName: 'Gulf Electronics KSA'
   }
 ];
 
