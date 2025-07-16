@@ -107,7 +107,8 @@ export const CreatePurchaseOrder = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <AppLayout>
+      <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button 
           variant="outline" 
@@ -283,6 +284,7 @@ export const CreatePurchaseOrder = () => {
           </Button>
         </div>
       </form>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
