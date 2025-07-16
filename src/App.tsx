@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AppLayout } from "@/components/Layout/AppLayout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
@@ -33,37 +35,51 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/admin" element={
               <ProtectedRoute allowedRole="admin">
-                <AdminDashboard />
+                <AppLayout>
+                  <AdminDashboard />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin/vendors" element={
               <ProtectedRoute allowedRole="admin">
-                <VendorList />
+                <AppLayout>
+                  <VendorList />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin/products" element={
               <ProtectedRoute allowedRole="admin">
-                <ProductList />
+                <AppLayout>
+                  <ProductList />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin/purchase-orders" element={
               <ProtectedRoute allowedRole="admin">
-                <PurchaseOrders />
+                <AppLayout>
+                  <PurchaseOrders />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/vendor" element={
               <ProtectedRoute allowedRole="vendor">
-                <VendorDashboard />
+                <AppLayout>
+                  <VendorDashboard />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/vendor/orders" element={
               <ProtectedRoute allowedRole="vendor">
-                <VendorOrders />
+                <AppLayout>
+                  <VendorOrders />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/vendor/orders/:orderId" element={
               <ProtectedRoute allowedRole="vendor">
-                <OrderDetails />
+                <AppLayout>
+                  <OrderDetails />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin/add-vendor" element={
@@ -78,7 +94,9 @@ const App = () => (
             } />
             <Route path="/admin/vendors/:vendorId/products" element={
               <ProtectedRoute allowedRole="admin">
-                <VendorProducts />
+                <AppLayout>
+                  <VendorProducts />
+                </AppLayout>
               </ProtectedRoute>
             } />
             <Route path="/admin/create-purchase-order" element={
@@ -88,7 +106,9 @@ const App = () => (
             } />
             <Route path="/admin/shipped-orders" element={
               <ProtectedRoute allowedRole="admin">
-                <ShippedOrders />
+                <AppLayout>
+                  <ShippedOrders />
+                </AppLayout>
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
