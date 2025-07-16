@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { mockProducts } from '@/data/mockData';
-import { Search, Plus, Package, DollarSign, BarChart3 } from 'lucide-react';
+import { Search, Plus, Package, DollarSign, BarChart3, Eye, Edit } from 'lucide-react';
+import { formatCurrency } from '@/lib/currency';
 
 export const ProductList: React.FC = () => {
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ export const ProductList: React.FC = () => {
               <div className="pt-3 border-t space-y-2">
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-lg font-bold">${product.price}</span>
+                  <span className="text-lg font-bold">{formatCurrency(product.price)}</span>
                 </div>
                 
                 <div className="flex items-center gap-2">
@@ -147,10 +148,21 @@ export const ProductList: React.FC = () => {
               </div>
               
               <div className="flex gap-2 pt-3">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => console.log('View product:', product.id)}
+                >
+                  <Eye className="w-4 h-4 mr-1" />
                   View
                 </Button>
-                <Button size="sm" className="flex-1 bg-gradient-primary hover:bg-primary-hover">
+                <Button 
+                  size="sm" 
+                  className="flex-1 bg-gradient-primary hover:bg-primary-hover"
+                  onClick={() => console.log('Edit product:', product.id)}
+                >
+                  <Edit className="w-4 h-4 mr-1" />
                   Edit
                 </Button>
               </div>

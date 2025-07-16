@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { mockPurchaseOrders } from '@/data/mockData';
 import { Search, Plus, FileText, Calendar, DollarSign, Building2, Eye } from 'lucide-react';
+import { formatCurrency } from '@/lib/currency';
 
 export const PurchaseOrders: React.FC = () => {
   const navigate = useNavigate();
@@ -103,7 +104,11 @@ export const PurchaseOrders: React.FC = () => {
                   <Badge className={getStatusColor(order.status)}>
                     {order.status}
                   </Badge>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => console.log('View purchase order details:', order.id)}
+                  >
                     <Eye className="w-4 h-4 mr-2" />
                     View Details
                   </Button>
@@ -123,7 +128,7 @@ export const PurchaseOrders: React.FC = () => {
                   <DollarSign className="w-4 h-4 text-muted-foreground" />
                   <div>
                     <p className="text-sm text-muted-foreground">Total Amount</p>
-                    <p className="font-medium">${order.total.toLocaleString()}</p>
+                    <p className="font-medium">{formatCurrency(order.total)}</p>
                   </div>
                 </div>
                 
@@ -155,7 +160,7 @@ export const PurchaseOrders: React.FC = () => {
                       <span className="text-muted-foreground">
                         {item.quantity}x {item.productName} ({item.sku})
                       </span>
-                      <span className="font-medium">${item.total.toLocaleString()}</span>
+                      <span className="font-medium">{formatCurrency(item.total)}</span>
                     </div>
                   ))}
                   {order.items.length > 3 && (

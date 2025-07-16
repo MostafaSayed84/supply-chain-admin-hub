@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { mockVendors } from '@/data/mockData';
-import { Search, Plus, Building2, Phone, Mail, MapPin } from 'lucide-react';
+import { Search, Plus, Building2, Phone, Mail, MapPin, Eye, Settings } from 'lucide-react';
 
 export const VendorList: React.FC = () => {
   const navigate = useNavigate();
@@ -108,10 +108,21 @@ export const VendorList: React.FC = () => {
               </div>
               
               <div className="flex gap-2 pt-3">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => console.log('View vendor details:', vendor.id)}
+                >
+                  <Eye className="w-4 h-4 mr-1" />
                   View Details
                 </Button>
-                <Button size="sm" className="flex-1 bg-gradient-primary hover:bg-primary-hover">
+                <Button 
+                  size="sm" 
+                  className="flex-1 bg-gradient-primary hover:bg-primary-hover"
+                  onClick={() => console.log('Manage vendor:', vendor.id)}
+                >
+                  <Settings className="w-4 h-4 mr-1" />
                   Manage
                 </Button>
               </div>
